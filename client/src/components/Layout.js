@@ -1,6 +1,9 @@
 import React from 'react';
 
 import { useGlobalContext } from '../hooks/useGlobalContext.hook';
+import Sidebar from './dashboard/Sidebar';
+import Trips from './dashboard/Trips';
+import Transactions from './dashboard/Transactions';
 
 const Layout = () => {
   const { dashboardView } = useGlobalContext();
@@ -8,18 +11,18 @@ const Layout = () => {
   return (
     <div className='flex flex-row bg-neutral-100 h-screen w-screen overflow-y-scroll'>
       <div>
-        Sidebar
+        <Sidebar/>
       </div>
       <div className='p-4'>
         <div>
           {(() => {
             switch (dashboardView) {
               case 'trips':
-                return <>Trips</>;
+                return <Trips/>;
               case 'transactions':
-                return <>Transactions</>;
+                return <Transactions/>;
               default:
-                return <>Trips</>;
+                return <Trips/>;
             }
           })()}
         </div>

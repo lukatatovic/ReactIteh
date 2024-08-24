@@ -5,7 +5,6 @@
 @tailwind utilities;
 
 :root {
-  /* Color Palette */
   --black: #000000;
   --cyan-bluish-gray: #abb8c3;
   --white: #fff;
