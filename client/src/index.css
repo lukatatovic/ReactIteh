@@ -38,3 +38,10 @@
   margin: 0;
   color: var(--blue-gray);
 }
+.bg-medium-green-cyan {
+  background-color: var(--medium-green-cyan);
+}
+
+.bg-light-green-cyan {
+  background-color: var(--light-green-cyan);
+}
