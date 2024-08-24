@@ -1,8 +1,11 @@
 import React from 'react'
+import Layout from '../components/Layout';
 
 const Dashboard = () => {
   return (
-    <div>Dashboard</div>
+    <div className='h-screen flex flex-col bg-stone-50'>
+      <Layout />
+    </div>
   )
 }
 
