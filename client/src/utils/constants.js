@@ -1,4 +1,4 @@
-import { FiLogOut, FiSettings } from 'react-icons/fi';
+import { FiInfo,FiLogOut, FiSettings } from 'react-icons/fi';
 import { RiMoneyDollarCircleLine } from 'react-icons/ri';
 import { MdTravelExplore } from 'react-icons/md';
 
@@ -20,6 +20,11 @@ export const sidebar_bottom_links = [
     key: 'settings',
     label: 'Settings',
     icon: <FiSettings />,
+  },
+  {
+    key: 'aboutus',
+    label: 'About us',
+    icon: <FiInfo />,
   },
   {
     key: 'logout',

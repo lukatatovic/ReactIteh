@@ -43,7 +43,9 @@ const Sidebar = () => {
                 onLogout();
               } else if (item.key === 'settings') {
                 navigate('/profile');
-              } 
+              } else if (item.key === 'aboutus') {
+                navigate('/about');
+              }
             }}
           >
             <span className='text-xl'>{item.icon}</span>
