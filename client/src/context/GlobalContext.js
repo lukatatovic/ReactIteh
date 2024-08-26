@@ -5,6 +5,8 @@ const GlobalContext = React.createContext({
   setDashboardView: () => {},
   userData: {},
   setUserData: () => {},
+  transactions: {},
+  setTransactions: () => {},
 });
 
 export default GlobalContext;
