@@ -2,6 +2,7 @@ import bcryptjs from 'bcryptjs';
 import {User} from '../models/User.model';
 import { generateTokenAndSetCookie } from '../utils/generateTokenAndSetCookie';
 import { generateVerificationCode } from '../utils/generateVerificationCode';
+import { sendVerificationMail } from '../utils/mail/emails';
 
 export const signup = async (req, res) => {
 
@@ -33,6 +34,7 @@ export const signup = async (req, res) => {
     await user.save();
 
     generateTokenAndSetCookie(res, user._id);
+    await sendVerificationMail(user.name, user.email, verificationCode);
 
     res.status(201).json({
       success: true,
