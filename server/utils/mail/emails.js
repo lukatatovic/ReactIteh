@@ -28,3 +28,30 @@ export const sendVerificationMail = async (name, email, verificationCode) => {
     throw new Error('Something went wrong while sending an email verification');
   }
 };
+
+export const sendWelcomeEmail = async (email, name) => {
+    let mail = {
+      body: {
+        name,
+        intro:
+          'Welcome to Splitwise! Your account has been verified, you can log in now.',
+        outro:
+          "Need help, or have questions? Just reply to this email, we'd love to help.",
+      },
+    };
+  
+    let emailBody = MailGenerator.generate(mail);
+    let message = {
+      from: process.env.GMAIL_EMAIL,
+      to: email,
+      subject: 'Account verified',
+      html: emailBody,
+    };
+  
+    try {
+      await transporter.sendMail(message);
+    } catch (error) {
+      console.log(error);
+      throw new Error('Something went wrong while sending an welcome email');
+    }
+  };

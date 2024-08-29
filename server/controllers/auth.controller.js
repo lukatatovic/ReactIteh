@@ -2,7 +2,7 @@ import bcryptjs from 'bcryptjs';
 import {User} from '../models/User.model';
 import { generateTokenAndSetCookie } from '../utils/generateTokenAndSetCookie';
 import { generateVerificationCode } from '../utils/generateVerificationCode';
-import { sendVerificationMail } from '../utils/mail/emails';
+import { sendVerificationMail, sendWelcomeEmail } from '../utils/mail/emails';
 
 export const signup = async (req, res) => {
 
@@ -42,6 +42,46 @@ export const signup = async (req, res) => {
       user: {
         ...user._doc,
         password: undefined, // remove password from response (security)
+      },
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+export const verifyEmail = async (req, res) => {
+  const { email, code } = req.body;
+
+  try {
+    const user = await User.findOne({
+      email,
+      verificationToken: code,
+      verificationTokenExpiresAt: { $gt: Date.now() },
+    });
+
+    if (!user) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid or expired verification code',
+      });
+    }
+
+    user.isVerified = true;
+    user.verificationToken = undefined;
+    user.verificationTokenExpiresAt = undefined;
+
+    await user.save();
+    await sendWelcomeEmail(user.email, user.name);
+
+    res.status(200).json({
+      success: true,
+      message: 'Account verified successfully',
+      user: {
+        ...user._doc,
+        password: undefined,
       },
     });
   } catch (error) {
