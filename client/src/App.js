@@ -4,6 +4,7 @@ import { Toaster } from 'react-hot-toast';
 
 import { useAuthStore } from './store/authStore';
 import FloatingCircle from './components/shared/FloatingCircle';
+import LoadingSpinner from './components/shared/LoadingSpinner';
 import RedirectAuthenticatedUser from './components/auth/RedirectAuthenticatedUser';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import Home from './pages/Home';
@@ -15,11 +16,15 @@ import Login from './pages/auth/Login';
 import VerifyEmail from './pages/auth/VerifyEmail';
 
 function App() {
-  const { isCheckingAuth, checkAuth, isAuthenticated } = useAuthStore();
+  const { isCheckingAuth, checkAuth} = useAuthStore();
 
   useEffect(() => {
     checkAuth();
   }, [checkAuth]);
+
+  if (isCheckingAuth) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <div

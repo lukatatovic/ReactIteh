@@ -24,7 +24,7 @@ const TripCard = ({ trip }) => {
     };
 
     getImage();
-  }, [trip.destination]);
+  }, [trip.destination]);// eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className='bg-white rounded-md w-96'>

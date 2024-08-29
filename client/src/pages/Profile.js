@@ -1,135 +1,111 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import toast, { Toaster } from 'react-hot-toast';
-import { useFormik } from 'formik';
+import { motion } from 'framer-motion';
+import { Mail, User } from 'lucide-react';
 
-import avatar from '../assets/favicon.png';
-import { profileValidate } from '../utils/validate';
-import { convertToBase64 } from '../utils/convert';
-import { useGlobalContext } from '../hooks/useGlobalContext.hook';
+import { useAuthStore } from '../store/authStore';
+import { formatDate } from '../utils/date';
+import Input from '../components/auth/Input';
 
 const Profile = () => {
-  const [file, setFile] = useState();
-  const navigate = useNavigate();
-  const { userData, setUserData } = useGlobalContext();
+  const { user, logout } = useAuthStore();
+  const [name, setName] = useState(user.name || '');
+  const [email, setEmail] = useState(user.email || '');
 
-  const formik = useFormik({
-    initialValues: {
-      firstName: userData?.firstName || '',
-      lastName: userData?.lastName || '',
-      username: userData?.username || '',
-      email: userData?.email || '',
-    },
-    enableReinitialize: true,
-    validate: profileValidate,
-    validateOnBlur: false,
-    validateOnChange: false,
-    onSubmit: async (values) => {
-      values = Object.assign(values, {
-        profile: file || userData?.profile || '',
-      });
-      setUserData({
-        firstName: values.firstName,
-        lastName: values.lastName,
-        username: values.username,
-        email: values.email,
-        profile: values.profile,
-      });
-      toast.success(<b>Updated profile information!</b>);
-    },
-  });
-
-  const onUpload = async (e) => {
-    const base64 = await convertToBase64(e.target.files[0]);
-    setFile(base64);
+  const handleLogout = () => {
+    logout();
   };
 
-  const onLogout = () => {
-    // Logout logic
-    navigate('/');
+  const handleUpdateProfile = async (e) => {
+    e.preventDefault();
   };
 
   return (
-    <div className=' mx-auto '>
-      <Toaster position='top-center' reverseOrder={false}></Toaster>
-      <div className='flex justify-center items-center h-screen'>
-        <div className='glass' style={{ width: '45%', paddingTop: '3em' }}>
-          <div className='title flex flex-col items-center'>
-            <h4 className='text-5xl font-bold'>Profile Settings</h4>
-            <span className='py-4 text-xl w-2/3 text-center text-gray-500'>
-              Edit your Information
-            </span>
-          </div>
-          <form className='py-1' onSubmit={formik.handleSubmit}>
-            <div className='profile flex justify-center py-4'>
-              <label htmlFor='profile'>
-                <img
-                  src={file || userData?.profile || avatar}
-                  alt='avatar'
-                  className='profile_img'
-                />
-              </label>
-              <input
-                type='file'
-                id='profile'
-                name='profile'
-                onChange={onUpload}
-              />
-            </div>
+    <motion.div
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.9 }}
+      transition={{ duration: 0.5 }}
+      className='max-w-md w-full mx-auto mt-10 p-8 bg-gray-900 bg-opacity-80 backdrop-filter backdrop-blur-lg rounded-xl shadow-2xl border border-gray-800'
+    >
+      <h2 className='text-3xl font-bold mb-6 text-center bg-gradient-to-r from-green-400 to-emerald-600 text-transparent bg-clip-text'>
+        User Profile
+      </h2>
 
-            <div className='flex flex-col items-center gap-6'>
-              <div className='name flex w-3/4 gap-10'>
-                <input
-                  type='text'
-                  placeholder='First Name'
-                  {...formik.getFieldProps('firstName')}
-                  className='textbox'
-                />
-                <input
-                  type='text'
-                  placeholder='Last Name'
-                  {...formik.getFieldProps('lastName')}
-                  className='textbox'
-                />
-              </div>
-              <input
-                type='text'
-                placeholder='Email'
-                {...formik.getFieldProps('email')}
-                className='textbox'
-              />
-              <input
-                type='text'
-                placeholder='Username'
-                {...formik.getFieldProps('username')}
-                className='textbox'
-              />
+        
+      <div className='space-y-6'>
+        <motion.div
+          className='p-4 bg-gray-800 bg-opacity-50 rounded-lg border border-gray-700'
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+        >
+          <h3 className='text-xl font-semibold text-green-400 mb-3'>
+            Profile Information
+          </h3>
 
-              <button type='submit' className='btn'>
-                Update Details
-              </button>
-            </div>
+          <form onSubmit={handleUpdateProfile}>
+            <Input
+              icon={User}
+              type='text'
+              placeholder='Full Name'
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              disabled={true}
+            />
 
-            <div className='text-center py-4'>
-              <span className='text-gray-500'>
-                That's it for now?{' '}
-                <button onClick={onLogout} className='text-red-500'>
-                  Logout
-                </button>
-              </span>
-            </div>
-            <div className='text-center'>
-              <span
-                onClick={() => navigate('/dashboard')}
-                className='text-gray-500 cursor-pointer'
-              >
-                Back to Dashboard
-              </span>
-            </div>
+            <Input
+              icon={Mail}
+              type='email'
+              placeholder='Email Address'
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              disabled={true}
+            />
           </form>
-        </div>
+        </motion.div>
+        <motion.div
+          className='p-4 bg-gray-800 bg-opacity-50 rounded-lg border border-gray-700'
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
+        >
+          <h3 className='text-xl font-semibold text-green-400 mb-3'>
+            Account Activity
+          </h3>
+          <p className='text-gray-300'>
+            <span className='font-bold text-green-400'>Joined: </span>
+            {new Date(user.createdAt).toLocaleDateString('en-US', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+            })}
+          </p>
+          <p className='text-gray-300'>
+            <span className='font-bold text-green-400'>Last Login: </span>
+
+            {formatDate(user.lastLogin)}
+          </p>
+        </motion.div>
       </div>
-    </div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.6 }}
+        className='mt-4'
+      >
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={handleLogout}
+          className='w-full py-3 px-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white 
+				font-bold rounded-lg shadow-lg hover:from-green-600 hover:to-emerald-700
+				 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-gray-900'
+        >
+          Logout
+        </motion.button>
+      </motion.div>
+    </motion.div>
   );
 };
 
