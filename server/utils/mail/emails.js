@@ -91,3 +91,29 @@ export const sendWelcomeEmail = async (email, name) => {
       throw new Error('Something went wrong while sending forgot password mail');
     }
   };
+
+  export const sendResetSuccessEmail = async (email, name) => {
+    let mail = {
+      body: {
+        name,
+        intro: 'Your password has been changed successfully!',
+        outro:
+          "Need help, or have questions? Just reply to this email, we'd love to help.",
+      },
+    };
+  
+    let emailBody = MailGenerator.generate(mail);
+    let message = {
+      from: process.env.GMAIL_EMAIL,
+      to: email,
+      subject: 'Password Changed',
+      html: emailBody,
+    };
+  
+    try {
+      await transporter.sendMail(message);
+    } catch (error) {
+      console.log(error);
+      throw new Error('Something went wrong while sending forgot password mail');
+    }
+  };
