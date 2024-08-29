@@ -55,3 +55,39 @@ export const sendWelcomeEmail = async (email, name) => {
       throw new Error('Something went wrong while sending an welcome email');
     }
   };
+
+  export const sendForgotPasswordMail = async (email, name, url) => {
+    let mail = {
+      body: {
+        name,
+        intro:
+          'You have received this email because a password reset request for your account was received.',
+        action: {
+          instructions:
+            'To provide new password for your account, please click here:',
+          button: {
+            color: '#22BC66',
+            text: 'Reset Password',
+            link: url,
+          },
+        },
+        outro:
+          "Need help, or have questions? Just reply to this email, we'd love to help.",
+      },
+    };
+  
+    let emailBody = MailGenerator.generate(mail);
+    let message = {
+      from: process.env.GMAIL_EMAIL,
+      to: email,
+      subject: 'Forgot Password?',
+      html: emailBody,
+    };
+  
+    try {
+      await transporter.sendMail(message);
+    } catch (error) {
+      console.log(error);
+      throw new Error('Something went wrong while sending forgot password mail');
+    }
+  };

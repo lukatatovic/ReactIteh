@@ -1,8 +1,9 @@
 import bcryptjs from 'bcryptjs';
+import crypto from 'crypto';
 import {User} from '../models/User.model';
 import { generateTokenAndSetCookie } from '../utils/generateTokenAndSetCookie';
 import { generateVerificationCode } from '../utils/generateVerificationCode';
-import { sendVerificationMail, sendWelcomeEmail } from '../utils/mail/emails';
+import { sendForgotPasswordMail,sendVerificationMail, sendWelcomeEmail } from '../utils/mail/emails';
 
 export const signup = async (req, res) => {
 
@@ -99,7 +100,7 @@ export const login = async (req, res) => {
   try {
     const user = await User.findOne({ email });
     if (!user) {
-      res.status(400).json({
+      return res.status(400).json({
         success: false,
         message: 'Wrong credentials',
       });
@@ -107,7 +108,7 @@ export const login = async (req, res) => {
 
     const isPasswordValid = await bcryptjs.compare(password, user.password);
     if (!isPasswordValid) {
-      res.status(400).json({
+      return res.status(400).json({
         success: false,
         message: 'Wrong credentials',
       });
@@ -139,6 +140,48 @@ export const logout = async (req, res) => {
     res.status(200).json({
       success: true,
       message: 'User logged out successfully',
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+export const forgotPassword = async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(400).json({
+        success: false,
+        message: 'User not found',
+      });
+    }
+
+    const resetToken = crypto.randomBytes(20).toString('hex');
+    const resetTokenExpiresAt = Date.now() + 1 * 60 * 60 * 1000; // 1 hour
+
+    user.resetPasswordToken = resetToken;
+    user.resetPasswordExpiresAt = resetTokenExpiresAt;
+
+    console.log(user.email);
+    console.log(user.name);
+    console.log(`${process.env.CLIENT_URL}/reset-password/${resetToken}`);
+
+    await user.save();
+
+    await sendForgotPasswordMail(
+      user.email,
+      user.name,
+      `${process.env.CLIENT_URL}/reset-password/${resetToken}`
+    );
+
+    res.status(200).json({
+      success: true,
+      message: 'Password reset link sent to your email',
     });
   } catch (error) {
     res.status(400).json({
