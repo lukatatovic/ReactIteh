@@ -1,9 +1,13 @@
 import { Routes, Route } from 'react-router-dom';
 
+import FloatingCircle from './components/shared/FloatingCircle';
 import Home from './pages/Home';
 import Dashboard from './pages/Dashboard';
 import Profile from './pages/Profile';
 import About from './pages/About';
+import SignUp from './pages/auth/SignUp';
+import Login from './pages/auth/Login';
+import VerifyEmail from './pages/auth/VerifyEmail';
 
 function App() {
   return (
@@ -37,6 +41,7 @@ function App() {
       <Route path='/' element={<Home />} />
       <Route path='/signup' element={<SignUp />} />
       <Route path='/login' element={<Login />} />
+      <Route path='/verify-email' element={<VerifyEmail />} />
       <Route path='/dashboard' element={<Dashboard />} />
       <Route path='/profile' element={<Profile />} />
       <Route path='/about' element={<About />} />
