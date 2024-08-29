@@ -5,14 +5,19 @@ import tripImg from '../../../assets/trip.jpg';
 
 const TripCard = ({ trip }) => {
   const [image, setImage] = useState(null);
+  const fetchImage = false;
 
   useEffect(() => {
     const getImage = async () => {
       try {
-        const res = await axios.get(
-          `https://api.unsplash.com/photos/random?client_id=JAWLX5tqR51mrkwNozXCTrEHIQ4xTEI1CTnYtKBWGGA&query=${trip.destination}`
-        );
-        setImage(res.data.urls.full);
+        if (fetchImage) {
+          const res = await axios.get(
+            `https://api.unsplash.com/photos/random?client_id=JAWLX5tqR51mrkwNozXCTrEHIQ4xTEI1CTnYtKBWGGA&query=${trip.destination}`
+          );
+          setImage(res.data.urls.full);
+        } else {
+          setImage(null);
+        }
       } catch (error) {
         console.error('Reached the limit for API calls!');
       }

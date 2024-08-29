@@ -1,7 +1,11 @@
+import { useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 
+import { useAuthStore } from './store/authStore';
 import FloatingCircle from './components/shared/FloatingCircle';
+import RedirectAuthenticatedUser from './components/auth/RedirectAuthenticatedUser';
+import ProtectedRoute from './components/auth/ProtectedRoute';
 import Home from './pages/Home';
 import Dashboard from './pages/Dashboard';
 import Profile from './pages/Profile';
@@ -11,6 +15,12 @@ import Login from './pages/auth/Login';
 import VerifyEmail from './pages/auth/VerifyEmail';
 
 function App() {
+  const { isCheckingAuth, checkAuth, isAuthenticated } = useAuthStore();
+
+  useEffect(() => {
+    checkAuth();
+  }, [checkAuth]);
+
   return (
     <div
     className='min-h-screen bg-gradient-to-br
@@ -40,12 +50,54 @@ function App() {
 
     <Routes>
       <Route path='/' element={<Home />} />
-      <Route path='/signup' element={<SignUp />} />
-      <Route path='/login' element={<Login />} />
-      <Route path='/verify-email/:email' element={<VerifyEmail />} />
-      <Route path='/dashboard' element={<Dashboard />} />
-      <Route path='/profile' element={<Profile />} />
-      <Route path='/about' element={<About />} />
+      <Route
+          path='/signup'
+          element={
+            <RedirectAuthenticatedUser>
+              <SignUp />
+            </RedirectAuthenticatedUser>
+          }
+        />
+      <Route
+          path='/login'
+          element={
+            <RedirectAuthenticatedUser>
+              <Login />
+            </RedirectAuthenticatedUser>
+          }
+        />
+      <Route
+          path='/verify-email/:email'
+          element={
+            <RedirectAuthenticatedUser>
+              <VerifyEmail />
+            </RedirectAuthenticatedUser>
+          }
+        />
+      <Route
+          path='/dashboard'
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+      <Route
+          path='/profile'
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          }
+        />
+      <Route
+          path='/about'
+          element={
+            <ProtectedRoute>
+              <About />
+            </ProtectedRoute>
+          }
+        />
     </Routes>
 
     <Toaster position='top-center' reverseOrder={false} />
