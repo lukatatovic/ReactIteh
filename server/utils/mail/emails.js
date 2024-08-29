@@ -8,6 +8,14 @@ export const sendVerificationMail = async (name, email, verificationCode) => {
     body: {
       name,
       intro: `Welcome to Splitwise! Your account verification code is: ${verificationCode}`,
+      action: {
+        instructions: 'To verify your account please click here:',
+        button: {
+          color: '#22BC66',
+          text: 'Verify Account',
+          link: `${process.env.CLIENT_URL}/verify-email/${email}`,
+        },
+      },
       outro:
         "Need help, or have questions? Just reply to this email, we'd love to help.",
     },

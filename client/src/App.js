@@ -1,4 +1,5 @@
 import { Routes, Route } from 'react-router-dom';
+import { Toaster } from 'react-hot-toast';
 
 import FloatingCircle from './components/shared/FloatingCircle';
 import Home from './pages/Home';
@@ -41,11 +42,13 @@ function App() {
       <Route path='/' element={<Home />} />
       <Route path='/signup' element={<SignUp />} />
       <Route path='/login' element={<Login />} />
-      <Route path='/verify-email' element={<VerifyEmail />} />
+      <Route path='/verify-email/:email' element={<VerifyEmail />} />
       <Route path='/dashboard' element={<Dashboard />} />
       <Route path='/profile' element={<Profile />} />
       <Route path='/about' element={<About />} />
     </Routes>
+
+    <Toaster position='top-center' reverseOrder={false} />
     </div>
   );
 }
