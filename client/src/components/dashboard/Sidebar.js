@@ -14,7 +14,7 @@ const Sidebar = () => {
   };
 
   return (
-    <div className='w-60 p-3 flex flex-col text-white bg-light-green-cyan h-screen'>
+    <div className='w-60 p-3 flex flex-col bg-neutral-300 h-screen'>
       <div className='flex items-center gap-2 px-1 py-3'>
         <img src={logo} alt='logo' className='w-10' />
         <span className='font-bold text-2xl'>Splitwise</span>

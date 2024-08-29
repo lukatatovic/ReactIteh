@@ -9,7 +9,7 @@ const Layout = () => {
   const { dashboardView } = useGlobalContext();
 
   return (
-    <div className='flex flex-row bg-neutral-100 h-screen w-screen overflow-y-scroll'>
+    <div className='flex flex-row h-screen w-screen overflow-y-scroll'>
       <div>
         <Sidebar/>
       </div>

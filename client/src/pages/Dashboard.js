@@ -3,7 +3,7 @@ import Layout from '../components/Layout';
 
 const Dashboard = () => {
   return (
-    <div className='h-screen flex flex-col bg-stone-50'>
+    <div className='h-screen flex flex-col'>
       <Layout />
     </div>
   )

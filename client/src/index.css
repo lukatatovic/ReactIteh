@@ -41,9 +41,9 @@
   color: var(--blue-gray);
 }
 .bg-medium-green-cyan {
-  background-color: var(--medium-green-cyan);
+  background-color: #064e3b;;
 }
 
 .bg-light-green-cyan {
-  background-color: var(--light-green-cyan);
+  background-color: #065f46;
 }

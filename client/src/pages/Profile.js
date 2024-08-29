@@ -50,7 +50,7 @@ const Profile = () => {
   };
 
   return (
-    <div className=' mx-auto bg-light-green-cyan'>
+    <div className=' mx-auto '>
       <Toaster position='top-center' reverseOrder={false}></Toaster>
       <div className='flex justify-center items-center h-screen'>
         <div className='glass' style={{ width: '45%', paddingTop: '3em' }}>

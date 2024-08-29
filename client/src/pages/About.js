@@ -7,7 +7,7 @@ const About = () => {
   const navigate = useNavigate();
 
   return (
-    <div className=' mx-auto bg-light-green-cyan'>
+    <div className=' mx-auto'>
       <div className='flex justify-center items-center h-screen'>
         <div className='glass' style={{ width: '45%', paddingTop: '3em' }}>
           <div className='title flex flex-col items-center'>
