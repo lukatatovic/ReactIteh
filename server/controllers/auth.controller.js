@@ -94,7 +94,56 @@ export const verifyEmail = async (req, res) => {
 
 export const login = async (req, res) => {
   res.send('Login');
+  const { email, password } = req.body;
+
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      res.status(400).json({
+        success: false,
+        message: 'Wrong credentials',
+      });
+    }
+
+    const isPasswordValid = await bcryptjs.compare(password, user.password);
+    if (!isPasswordValid) {
+      res.status(400).json({
+        success: false,
+        message: 'Wrong credentials',
+      });
+    }
+
+    generateTokenAndSetCookie(res, user._id);
+    user.lastLogin = Date.now();
+
+    res.status(200).json({
+      success: true,
+      message: 'User logged in successfully',
+      user: {
+        ...user._doc,
+        password: undefined,
+      },
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
 };
+
 export const logout = async (req, res) => {
   res.send('Logout');
-};  
+  try {
+    res.clearCookie('token');
+    res.status(200).json({
+      success: true,
+      message: 'User logged out successfully',
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
