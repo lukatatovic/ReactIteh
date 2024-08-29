@@ -27,6 +27,11 @@ const UserSchema = new mongoose.Schema(
       resetPasswordExpiresAt: Date,
       verificationToken: String,
       verificationTokenExpiresAt: Date,
+      profilePicture: {
+        type: String,
+        default:
+          'https://firebasestorage.googleapis.com/v0/b/splitwise-iteh.appspot.com/o/profileplaceholder.png?alt=media&token=90eaaa00-e04f-44b3-bd63-36edebb69572',
+      },
     },
     { timestamps: true }
 );

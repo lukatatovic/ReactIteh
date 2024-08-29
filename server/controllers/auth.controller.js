@@ -251,3 +251,46 @@ export const checkAuth = async (req, res) => {
     });
   }
 };
+
+export const updateUserInfo = async (req, res) => {
+  try {
+    const user = await User.findById(req.userId);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found',
+      });
+    }
+
+    if (req.body.password) {
+      req.body.password = bcryptjs.hashSync(req.body.password, 10);
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(
+      req.userId,
+      {
+        $set: {
+          name: req.body.name,
+          email: req.body.email,
+          password: req.body.password,
+          profilePicture: req.body.profilePicture,
+        },
+      },
+      { new: true }
+    );
+
+    res.status(200).json({
+      success: true,
+      message: 'User logged in successfully',
+      user: {
+        ...updatedUser._doc,
+        password: undefined,
+      },
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};

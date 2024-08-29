@@ -16,5 +16,6 @@ router.get('/check-auth', verifyToken, authController.checkAuth);
 
 // PUT Endpoints
 router.put('/reset-password/:token', authController.resetPassword);
+router.put('/update-user-info', verifyToken, authController.updateUserInfo);
 
 export default router;
