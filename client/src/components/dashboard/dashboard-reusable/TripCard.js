@@ -29,12 +29,12 @@ const TripCard = ({ trip }) => {
         <div className='flex flex-row gap-2 text-xs mt-2 text-neutral-500'>
           <p>
             <span>Total Cost: </span>
-            <span className='font-bold'>$0</span>
+            <span className='font-bold'>$ {trip.totalAmount}</span>
           </p>
           {!user.isAdmin && (
             <p>
               <span>My Cost: </span>
-              <span className='font-bold'>$0</span>
+              <span className='font-bold'>$ {trip.userAmount}</span>
             </p>
           )}
         </div>

@@ -1,4 +1,7 @@
+import mongoose from 'mongoose';
+
 import { Trip } from '../models/Trip.model.js';
+import { Transaction } from '../models/Transaction.model.js';
 
 export const createTrip = async (req, res) => {
   const { title, destination, startDate, endDate, participants, image } =
@@ -68,9 +71,43 @@ export const getTrips = async (req, res) => {
         }),
       });
 
+     // Summarize transactions related to each trip
+     const tripIds = trips.map((trip) => trip._id);
+
+     const transactionSummary = await Transaction.aggregate([
+       { $match: { trip: { $in: tripIds } } },
+       {
+         $group: {
+           _id: '$trip',
+           totalAmount: { $sum: '$amount' },
+           userAmount: {
+             $sum: {
+               $cond: [
+                 { $eq: ['$user', new mongoose.Types.ObjectId(userId)] },
+                 '$amount',
+                 0,
+               ],
+             },
+           },
+         },
+       },
+     ]);
+ 
+     // Map transaction summary to each trip
+     const tripsWithTransactionSums = trips.map((trip) => {
+       const summary = transactionSummary.find((ts) =>
+         ts._id.equals(trip._id)
+       ) || { totalAmount: 0, userAmount: 0 };
+       return {
+         ...trip.toObject(),
+         totalAmount: summary.totalAmount,
+         userAmount: summary.userAmount,
+       };
+     });
+      
     res.status(200).json({
       success: true,
-      trips,
+      trips: tripsWithTransactionSums,
       total: totalTrips,
       filtered: totalFilteredTrips,
     });
@@ -97,9 +134,44 @@ export const getAllTrips = async (req, res) => {
 
     const totalTrips = await Trip.countDocuments();
 
+     // Summarize transactions related to each trip
+     const tripIds = trips.map((trip) => trip._id);
+     const userId = req.userId;
+ 
+     const transactionSummary = await Transaction.aggregate([
+       { $match: { trip: { $in: tripIds } } },
+       {
+         $group: {
+           _id: '$trip',
+           totalAmount: { $sum: '$amount' },
+           userAmount: {
+             $sum: {
+               $cond: [
+                 { $eq: ['$user', new mongoose.Types.ObjectId(userId)] },
+                 '$amount',
+                 0,
+               ],
+             },
+           },
+         },
+       },
+     ]);
+ 
+     // Map transaction summary to each trip
+     const tripsWithTransactionSums = trips.map((trip) => {
+       const summary = transactionSummary.find((ts) =>
+         ts._id.equals(trip._id)
+       ) || { totalAmount: 0, userAmount: 0 };
+       return {
+         ...trip.toObject(),
+         totalAmount: summary.totalAmount,
+         userAmount: summary.userAmount,
+       };
+     });
+
     res.status(200).json({
       success: true,
-      trips,
+      trips: tripsWithTransactionSums,
       total: totalTrips,
     });
   } catch (error) {
