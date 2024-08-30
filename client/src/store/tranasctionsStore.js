@@ -29,4 +29,25 @@ export const useTransactionsStore = create((set) => ({
       throw error;
     }
   },
+
+  // Get My Transaction
+  getMyTransactions: async () => {
+    set({ isLoading: true, error: null });
+    try {
+      const response = await axios.get(`${API_URL}`);
+
+      set({
+        isLoading: false,
+      });
+      return response.data;
+    } catch (error) {
+      set({
+        error:
+          error.response.data.message ||
+          'Something went wrong while fetching transactions',
+        isLoading: false,
+      });
+      throw error;
+    }
+  },
 }));

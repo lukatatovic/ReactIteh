@@ -6,6 +6,7 @@ export const getOtherUsers = async (req, res) => {
       _id: {
         $ne: req.userId,
       },
+      isAdmin: false,
     });
 
     res.status(200).json({

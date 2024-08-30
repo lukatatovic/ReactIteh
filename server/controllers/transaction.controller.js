@@ -30,6 +30,26 @@ export const createTransaction = async (req, res) => {
   }
 };
 
+export const getMyTransactions = async (req, res) => {
+    try {
+      const transactions = await Transaction.find({ user: req.userId })
+        .populate('user')
+        .populate('trip')
+        .populate('category')
+        .exec();
+  
+      res.status(200).json({
+        success: true,
+        transactions,
+      });
+    } catch (error) {
+      res.status(400).json({
+        success: false,
+        message: error.message,
+      });
+    }
+  };
+
 export const getAllTransactions = async (req, res) => {
   try {
     const transactions = await Transaction.find({})
