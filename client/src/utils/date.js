@@ -13,3 +13,16 @@ export const formatDate = (dateString) => {
       hour12: true,
     });
   };
+  
+  export const formatDateNoTime = (dateString) => {
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) {
+      return 'Invalid Date';
+    }
+  
+    return date.toLocaleString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    });
+  };

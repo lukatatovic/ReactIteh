@@ -30,7 +30,7 @@ const UserSchema = new mongoose.Schema(
       profilePicture: {
         type: String,
         default:
-          'https://firebasestorage.googleapis.com/v0/b/splitwise-iteh.appspot.com/o/profileplaceholder.png?alt=media&token=90eaaa00-e04f-44b3-bd63-36edebb69572',
+          'https://firebasestorage.googleapis.com/v0/b/splitwise-iteh.appspot.com/o/profileplaceholder.png?alt=media&token=4dc5d147-f614-4f0b-a674-fe7c4520bf17',
       },
     },
     { timestamps: true }

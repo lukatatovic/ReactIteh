@@ -16,6 +16,7 @@ import Login from './pages/auth/Login';
 import VerifyEmail from './pages/auth/VerifyEmail';
 import ForgotPassword from './pages/auth/ForgotPassword';
 import ResetPassword from './pages/auth/ResetPassword';
+import CreateTrip from './pages/CreateTrip';
 
 function App() {
   const { isCheckingAuth, checkAuth} = useAuthStore();
@@ -121,6 +122,14 @@ function App() {
             </ProtectedRoute>
           }
         />
+      <Route
+          path='/create-trip'
+          element={
+            <ProtectedRoute>
+              <CreateTrip />
+            </ProtectedRoute>
+          }
+        />  
     </Routes>
 
     <Toaster position='top-center' reverseOrder={false} />

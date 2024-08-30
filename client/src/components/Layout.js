@@ -9,12 +9,12 @@ const Layout = () => {
   const { dashboardView } = useGlobalContext();
 
   return (
-    <div className='flex flex-row h-screen w-screen overflow-y-scroll'>
+    <div className='flex flex-row h-screen w-screen'>
       <div>
         <Sidebar/>
       </div>
       <div className='p-4'>
-        <div>
+      <div className='overflow-y-scroll h-full'>
           {(() => {
             switch (dashboardView) {
               case 'trips':

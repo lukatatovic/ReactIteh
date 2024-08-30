@@ -4,6 +4,8 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import {connectDB} from './db/connectDB.js';
 import authRoutes from './routes/auth.route.js';
+import userRoutes from './routes/user.route.js';
+import tripRoutes from './routes/trip.route.js';
 
 dotenv.config();
 const port = process.env.PORT || 8000;
@@ -23,6 +25,8 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api/auth', authRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/trips', tripRoutes);
 
 app.listen(port, () => {
   connectDB;
