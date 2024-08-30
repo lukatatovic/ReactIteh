@@ -7,6 +7,7 @@ import authRoutes from './routes/auth.route.js';
 import userRoutes from './routes/user.route.js';
 import tripRoutes from './routes/trip.route.js';
 import categoryRoutes from './routes/category.route.js';
+import transactionRoutes from './routes/transaction.route.js';
 
 dotenv.config();
 const port = process.env.PORT || 8000;
@@ -29,6 +30,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/trips', tripRoutes);
 app.use('/api/categories', categoryRoutes);
+app.use('/api/transactions', transactionRoutes);
 
 app.listen(port, () => {
   connectDB;
