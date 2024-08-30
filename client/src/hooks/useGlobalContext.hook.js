@@ -9,17 +9,9 @@ export const useGlobalContext = () => {
   const {
     dashboardView,
     setDashboardView,
-    userData,
-    setUserData,
-    transactions,
-    setTransactions,
   } = context;
   return {
     dashboardView,
     setDashboardView,
-    userData,
-    setUserData,
-    transactions,
-    setTransactions,
   };
 };

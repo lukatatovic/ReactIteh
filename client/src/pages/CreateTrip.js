@@ -57,7 +57,7 @@ const CreateTrip = () => {
         return;
       }
 
-      participants.push(user._id);
+      participants.push(user);
 
       const participantsIds = participants.map((p) => {
         return p._id;

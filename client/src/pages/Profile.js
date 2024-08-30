@@ -31,7 +31,7 @@ const Profile = () => {
     try {
       await updateUser({
         name,
-        profilePicture: fileUrl,
+        profilePicture: fileUrl || user?.profilePicture || '',
       });
     } catch (error) {
       console.error(error);

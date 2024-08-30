@@ -11,13 +11,17 @@ const ForgotPassword = () => {
   const [email, setEmail] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const { isLoading, forgotPassword } = useAuthStore();
+  const { isLoading, forgotPassword, error } = useAuthStore();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await forgotPassword(email);
-    setIsSubmitted(true);
-    toast.success('Email with Reset Password link has been sent to you');
+    try {
+      await forgotPassword(email);
+      setIsSubmitted(true);
+      toast.success('Email with Reset Password link has been sent to you');
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -58,6 +62,9 @@ const ForgotPassword = () => {
                 'Send Reset Link'
               )}
             </motion.button>
+            {error && (
+              <p className='text-red-500 mt-6 font-semibold'>{error}</p>
+            )}
           </form>
         ) : (
           <div className='text-center'>

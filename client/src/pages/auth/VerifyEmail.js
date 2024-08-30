@@ -45,9 +45,6 @@ const VerifyEmail = () => {
     e.preventDefault();
     const verificationCode = code.join('');
 
-    console.log(email);
-    console.log(verificationCode);
-
     try {
       await verifyEmail(email, verificationCode);
       navigate('/dashboard');

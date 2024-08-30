@@ -31,6 +31,7 @@ const Categories = () => {
           return category._id !== editedCategoryId;
         });
         setCategories(newCategories);
+        toast.success('Category deleted');
         setEditedCategoryId(null);
         setEditedField('');
         return;
@@ -127,6 +128,7 @@ const Categories = () => {
                   onChange={(e) => {
                     setEditedCategoryId(category._id);
                     setEditedField(e.target.value);
+                    setCreatingCategory(false);
                   }}
                 />
                 {category._id === editedCategoryId && (
@@ -169,7 +171,7 @@ const Categories = () => {
                   setNewCategory(e.target.value);
                 }}
               />
-              {newCategory.trim() !== '' && (
+              {newCategory?.trim() !== '' && (
                 <button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}

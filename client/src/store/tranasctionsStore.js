@@ -51,6 +51,27 @@ export const useTransactionsStore = create((set) => ({
     }
   },
 
+  // Get My Transaction
+  getAllTransactions: async () => {
+    set({ isLoading: true, error: null });
+    try {
+      const response = await axios.get(`${API_URL}/all`);
+
+      set({
+        isLoading: false,
+      });
+      return response.data;
+    } catch (error) {
+      set({
+        error:
+          error.response.data.message ||
+          'Something went wrong while fetching transactions',
+        isLoading: false,
+      });
+      throw error;
+    }
+  },
+
   // Get Users Spending Per Trip
   getUsersSpending: async (tripId, userId) => {
     set({ isLoading: true, error: null });

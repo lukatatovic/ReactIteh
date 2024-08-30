@@ -39,8 +39,8 @@ export const createTrip = async (req, res) => {
 export const getTrips = async (req, res) => {
   try {
     const startIndex = parseInt(req.query.startIndex) || 0;
-    const limit = parseInt(req.query.limit || 8);
-    const sortDirection = req.query.order === 'asc' ? 1 : -1;
+    const limit = parseInt(req.query.limit || 80);
+    const sortDirection = req.query.order === 'desc' ? -1 : 1;
 
     const userId = req.userId;
 
@@ -53,7 +53,7 @@ export const getTrips = async (req, res) => {
         ],
       }),
     })
-      .sort({ createdAt: sortDirection })
+      .sort({ startDate: sortDirection })
       .skip(startIndex)
       .limit(limit)
       .populate('createdBy')

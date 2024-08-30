@@ -6,7 +6,7 @@ import LoadingSpinner from '../../shared/LoadingSpinner';
 
 const TableCell = ({ userId, tripId }) => {
   const [spending, setSpending] = useState(0);
-  const { getUsersSpending, isLoading, error } = useTransactionsStore();
+  const { getUsersSpending, isLoading } = useTransactionsStore();
 
   useEffect(() => {
     const fetchSpending = async () => {

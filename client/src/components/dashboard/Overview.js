@@ -19,7 +19,6 @@ const Overview = () => {
         setUsers(userRes.users);
         const tripRes = await getAllTrips('');
         setTrips(tripRes.trips);
-        console.log(tripRes.trips);
       } catch (error) {
         console.error(error);
       }
