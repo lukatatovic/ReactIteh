@@ -4,12 +4,15 @@ import { useNavigate } from 'react-router-dom';
 import logo from '../../assets/logofull.png';
 import { sidebar_links, sidebar_bottom_links } from '../../utils/constants';
 import { useGlobalContext } from '../../hooks/useGlobalContext.hook';
+import { useAuthStore } from '../../store/authStore';
 
 const Sidebar = () => {
   const { dashboardView, setDashboardView } = useGlobalContext();
   const navigate = useNavigate();
+  const { logout } = useAuthStore();
 
-  const onLogout = () => {
+  const onLogout = async () => {
+    await logout();
     navigate('/');
   };
 

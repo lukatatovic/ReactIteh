@@ -94,7 +94,7 @@ export const useAuthStore = create((set) => ({
     set({ isLoading: true, error: null });
 
     try {
-      await axios.get(`${API_URL}/logout`);
+      await axios.post(`${API_URL}/logout`);
       set({
         user: null,
         isAuthenticated: false,
@@ -147,6 +147,46 @@ export const useAuthStore = create((set) => ({
           error.response.data.message ||
           'Something went wrong while updating user info',
         isLoading: false,
+      });
+      throw error;
+    }
+  },
+
+  // Forgot password
+  forgotPassword: async (email) => {
+    set({ isLoading: true, error: null });
+
+    try {
+      await axios.post(`${API_URL}/forgot-password`, {
+        email,
+      });
+      set({
+        isLoading: false,
+      });
+    } catch (error) {
+      set({
+        error:
+          error.response.data.message ||
+          'Something went wrong while sending mail for forgot password',
+        isLoading: false,
+      });
+      throw error;
+    }
+  },
+
+  // Reset Password
+  resetPassword: async (token, email, password) => {
+    set({ isLoading: true, error: null });
+    try {
+      await axios.put(`${API_URL}/reset-password/${token}`, {
+        email,
+        password,
+      });
+      set({ isLoading: false });
+    } catch (error) {
+      set({
+        isLoading: false,
+        error: error.response.data.message || 'Error resetting password',
       });
       throw error;
     }

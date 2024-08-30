@@ -14,6 +14,8 @@ import About from './pages/About';
 import SignUp from './pages/auth/SignUp';
 import Login from './pages/auth/Login';
 import VerifyEmail from './pages/auth/VerifyEmail';
+import ForgotPassword from './pages/auth/ForgotPassword';
+import ResetPassword from './pages/auth/ResetPassword';
 
 function App() {
   const { isCheckingAuth, checkAuth} = useAuthStore();
@@ -79,6 +81,22 @@ function App() {
             </RedirectAuthenticatedUser>
           }
         />
+      <Route
+          path='/forgot-password'
+          element={
+            <RedirectAuthenticatedUser>
+              <ForgotPassword />
+            </RedirectAuthenticatedUser>
+          }
+        />
+        <Route
+          path='/reset-password/:token/:email'
+          element={
+            <RedirectAuthenticatedUser>
+              <ResetPassword />
+            </RedirectAuthenticatedUser>
+          }
+        />  
       <Route
           path='/dashboard'
           element={

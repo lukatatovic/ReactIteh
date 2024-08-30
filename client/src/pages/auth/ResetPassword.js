@@ -1,22 +1,40 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Mail, Lock,Loader } from 'lucide-react';
+import { Lock } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 import { useAuthStore } from '../../store/authStore';
 import Input from '../../components/auth/Input';
 
-const Login = () => {
-  const [email, setEmail] = useState('');
+const ResetPassword = () => {
   const [password, setPassword] = useState('');
-  const { login, error, isLoading } = useAuthStore();
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const { resetPassword, error, isLoading } = useAuthStore();
 
-  const handleLogin = async (e) => {
+  const { token, email } = useParams();
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (password !== confirmPassword) {
+      toast.error('Passwords do not match');
+      return;
+    }
     try {
-      await login(email, password);
+      await resetPassword(token, email, password);
+
+      toast.success(
+        'Password reset successfully, redirecting to login page...'
+      );
+
+      setTimeout(() => {
+        navigate('/login');
+      }, 2000);
     } catch (error) {
       console.error(error);
+      toast.error(error.message || 'Error resetting password');
     }
   };
 
@@ -29,36 +47,28 @@ const Login = () => {
     >
       <div className='p-8'>
         <h2 className='text-3xl font-bold mb-6 text-center bg-gradient-to-r from-green-400 to-emerald-500 text-transparent bg-clip-text'>
-          Welcome Back
+          Reset Password
         </h2>
+        {error && <p className='text-red-500 text-sm mb-4'>{error}</p>}
 
-        <form onSubmit={handleLogin}>
+        <form onSubmit={handleSubmit}>
           <Input
-            icon={Mail}
-            type='email'
-            placeholder='Email Address'
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            icon={Lock}
+            type='password'
+            placeholder='New Password'
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
           />
 
           <Input
             icon={Lock}
             type='password'
-            placeholder='Password'
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            placeholder='Confirm New Password'
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            required
           />
-
-          <div className='flex items-center mb-6'>
-            <Link
-              to='/forgot-password'
-              className='text-sm text-green-400 hover:underline'
-            >
-              Forgot password?
-            </Link>
-          </div>
-
-          {error && <p className='text-red-500 font-semibold mb-2'>{error}</p>}
 
           <motion.button
             whileHover={{ scale: 1.02 }}
@@ -67,24 +77,12 @@ const Login = () => {
             type='submit'
             disabled={isLoading}
           >
-            {isLoading ? (
-              <Loader className='w-6 h-6 animate-spin  mx-auto' />
-            ) : (
-              'Login'
-            )}
+            {isLoading ? 'Resetting...' : 'Set New Password'}
           </motion.button>
         </form>
-      </div>
-      <div className='px-8 py-4 bg-gray-900 bg-opacity-50 flex justify-center'>
-        <p className='text-sm text-gray-400'>
-          Don't have an account?{' '}
-          <Link to='/signup' className='text-green-400 hover:underline'>
-            Sign up
-          </Link>
-        </p>
       </div>
     </motion.div>
   );
 };
 
-export default Login;
+export default ResetPassword;

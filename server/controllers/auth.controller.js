@@ -106,6 +106,13 @@ export const login = async (req, res) => {
       });
     }
 
+    if (!user.isVerified) {
+      return res.status(400).json({
+        success: false,
+        message: "Your account hasn't been verified! Check your email",
+      });
+    }
+
     const isPasswordValid = await bcryptjs.compare(password, user.password);
     if (!isPasswordValid) {
       return res.status(400).json({
@@ -173,7 +180,7 @@ export const forgotPassword = async (req, res) => {
     await sendForgotPasswordMail(
       user.email,
       user.name,
-      `${process.env.CLIENT_URL}/reset-password/${resetToken}`
+      `${process.env.CLIENT_URL}/reset-password/${resetToken}/${email}`
     );
 
     res.status(200).json({
