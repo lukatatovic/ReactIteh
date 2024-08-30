@@ -17,6 +17,7 @@ import VerifyEmail from './pages/auth/VerifyEmail';
 import ForgotPassword from './pages/auth/ForgotPassword';
 import ResetPassword from './pages/auth/ResetPassword';
 import CreateTrip from './pages/CreateTrip';
+import CreateTransaction from './pages/CreateTransaction';
 
 function App() {
   const { isCheckingAuth, checkAuth} = useAuthStore();
@@ -129,7 +130,15 @@ function App() {
               <CreateTrip />
             </ProtectedRoute>
           }
-        />  
+        />
+      <Route
+          path='/create-transaction/:tripId'
+          element={
+            <ProtectedRoute>
+              <CreateTransaction />
+            </ProtectedRoute>
+          }
+        />    
     </Routes>
 
     <Toaster position='top-center' reverseOrder={false} />

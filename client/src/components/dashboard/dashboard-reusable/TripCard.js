@@ -1,11 +1,14 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import TripImg from '../../../assets/trip.jpg';
 import { formatDateNoTime } from '../../../utils/date';
 import { useAuthStore } from '../../../store/authStore';
+import MotionButton from '../../shared/MotionButton';
 
 const TripCard = ({ trip }) => {
   const { user } = useAuthStore();
+  const navigate = useNavigate();
 
   return (
     <div className='bg-white rounded-md w-96'>
@@ -35,6 +38,16 @@ const TripCard = ({ trip }) => {
             </p>
           )}
         </div>
+        {!user.isAdmin && (
+          <div className='border-t mt-2 pt-6 flex justify-end'>
+            <MotionButton
+              text={'Add new Transaction'}
+              onClick={() => {
+                navigate(`/create-transaction/${trip._id}`);
+              }}
+            />
+          </div>
+        )}
           </div>
       </div>
   );
