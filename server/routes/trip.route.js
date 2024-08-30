@@ -9,5 +9,12 @@ router.post('/', verifyToken, tripController.createTrip);
 
 // GET Endpoints
 router.get('/', verifyToken, tripController.getTrips);
+router.get('/:id', verifyToken, tripController.getTrip);
+
+// PUT Endpoints
+router.put('/:id', verifyToken, tripController.updateTrip);
+
+// DELETE Endpoints
+router.delete('/:id', verifyToken, tripController.deleteTrip);
 
 export default router;

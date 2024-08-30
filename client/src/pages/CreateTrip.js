@@ -59,12 +59,16 @@ const CreateTrip = () => {
 
       participants.push(user._id);
 
+      const participantsIds = participants.map((p) => {
+        return p._id;
+      });
+
       await createTrip({
         title,
         destination,
         startDate: new Date(dates[0].startDate),
         endDate: new Date(dates[0].endDate),
-        participants,
+        participants: participantsIds,
         image: fileUrl,
       });
 

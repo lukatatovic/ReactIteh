@@ -39,8 +39,10 @@ export const getTrips = async (req, res) => {
     const limit = parseInt(req.query.limit || 8);
     const sortDirection = req.query.order === 'asc' ? 1 : -1;
 
+    const userId = req.userId;
+
     const trips = await Trip.find({
-      ...(req.query.userId && { createdBy: req.query.userId }),
+        $or: [{ createdBy: userId }, { participants: userId }],
       ...(req.query.searchTerm && {
         $or: [
           { title: { $regex: req.query.searchTerm, $options: 'i' } },
@@ -56,10 +58,87 @@ export const getTrips = async (req, res) => {
 
     const totalTrips = await Trip.countDocuments();
 
+    const totalFilteredTrips = await Trip.countDocuments({
+        $or: [{ createdBy: userId }, { participants: userId }],
+        ...(req.query.searchTerm && {
+          $or: [
+            { title: { $regex: req.query.searchTerm, $options: 'i' } },
+            { destination: { $regex: req.query.searchTerm, $options: 'i' } },
+          ],
+        }),
+      });
+
     res.status(200).json({
       success: true,
       trips,
-      totalTrips,
+      total: totalTrips,
+      filtered: totalFilteredTrips,
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+export const getTrip = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const trip = await Trip.findById(id).populate('createdBy').exec();
+    if (!trip) {
+      res.status(404).json({
+        success: false,
+        message: 'Trip not found',
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      trip,
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+export const updateTrip = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const updatedTrip = await Trip.findByIdAndUpdate(id, req.body);
+    if (!updatedTrip) {
+      res.status(404).json({
+        success: false,
+        message: 'Trip not found',
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: 'Trip updated',
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+export const deleteTrip = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    await Trip.findByIdAndDelete(id);
+
+    return res.status(200).json({
+      success: true,
+      message: 'Trip deleted',
     });
   } catch (error) {
     res.status(400).json({
