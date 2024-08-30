@@ -2,8 +2,11 @@ import React from 'react';
 
 import TripImg from '../../../assets/trip.jpg';
 import { formatDateNoTime } from '../../../utils/date';
+import { useAuthStore } from '../../../store/authStore';
 
 const TripCard = ({ trip }) => {
+  const { user } = useAuthStore();
+
   return (
     <div className='bg-white rounded-md w-96'>
       <img
@@ -25,10 +28,12 @@ const TripCard = ({ trip }) => {
             <span>Total Cost: </span>
             <span className='font-bold'>$0</span>
           </p>
+          {!user.isAdmin && (
             <p>
               <span>My Cost: </span>
               <span className='font-bold'>$0</span>
             </p>
+          )}
         </div>
           </div>
       </div>

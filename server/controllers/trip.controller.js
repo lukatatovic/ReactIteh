@@ -82,6 +82,34 @@ export const getTrips = async (req, res) => {
   }
 };
 
+export const getAllTrips = async (req, res) => {
+  try {
+    const trips = await Trip.find({
+      ...(req.query.searchTerm && {
+        $or: [
+          { title: { $regex: req.query.searchTerm, $options: 'i' } },
+          { destination: { $regex: req.query.searchTerm, $options: 'i' } },
+        ],
+      }),
+    })
+      .populate('createdBy')
+      .exec();
+
+    const totalTrips = await Trip.countDocuments();
+
+    res.status(200).json({
+      success: true,
+      trips,
+      total: totalTrips,
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 export const getTrip = async (req, res) => {
   const { id } = req.params;
 

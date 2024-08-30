@@ -1,35 +1,39 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { Search } from 'lucide-react';
 
 import { useTripStore } from '../../store/tripsStore';
 import LoadingSpinner from '../shared/LoadingSpinner';
 import MotionButton from '../shared/MotionButton';
 import TripCard from './dashboard-reusable/TripCard';
+import Input from '../auth/Input';
 
 const Trips = () => {
   const [trips, setTrips] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const { getTrips, error, isLoading } = useTripStore();
+  const [searchTerm, setSearchTerm] = useState('');
+  const { user } = useAuthStore();
+  const { getTrips, getAllTrips, error, isLoading } = useTripStore();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchTrips = async () => {
-      const response = await getTrips({
+  const fetchTrips = async () => {
+    let response;
+    if (user.isAdmin) {
+      response = await getAllTrips(searchTerm);
+    } else {
+      response = await getTrips({
         startIndex: '',
-        limit: '8',
+        limit: '',
         order: '',
-        searchTerm: '',
+        searchTerm,
       });
-      setTrips(response.trips);
-    };
+    }
+    setTrips(response.trips);
+  };
 
-    fetchTrips();
-  }, []);
-
-  if (isLoading) {
-    return <LoadingSpinner />;
-  }
+    useEffect(() => {
+      fetchTrips();
+    }, [user, searchTerm]);
 
   if (error) {
     return <p>{error}</p>;
@@ -50,10 +54,27 @@ const Trips = () => {
       />
       </div>
 
+      <div className='p-4'>
+        <Input
+          icon={Search}
+          placeholder='Search'
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+      </div>
+
       <div className='flex flex-wrap gap-4 p-3'>
-        {trips.map((trip, idx) => (
-          <TripCard key={idx} trip={trip} />
-        ))}
+      {isLoading ? (
+          <div className='w-full'>
+            <LoadingSpinner />
+          </div>
+        ) : (
+          <>
+            {trips.map((trip, idx) => (
+              <TripCard key={idx} trip={trip} />
+            ))}
+          </>
+        )}
       </div>
       </motion.div>
   );

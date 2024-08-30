@@ -9,6 +9,7 @@ router.post('/', verifyToken, tripController.createTrip);
 
 // GET Endpoints
 router.get('/', verifyToken, tripController.getTrips);
+router.get('/all', verifyToken, tripController.getAllTrips);
 router.get('/:id', verifyToken, tripController.getTrip);
 
 // PUT Endpoints

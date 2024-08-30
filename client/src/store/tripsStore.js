@@ -52,4 +52,26 @@ export const useTripStore = create((set) => ({
       throw error;
     }
   },
+  // Get All Trips
+  getAllTrips: async (searchTerm) => {
+    set({ isLoading: true, error: null });
+    try {
+      const response = await axios.get(
+        `${API_URL}/all?searchTerm=${searchTerm}`
+      );
+
+      set({
+        isLoading: false,
+      });
+      return response.data;
+    } catch (error) {
+      set({
+        error:
+          error.response.data.message ||
+          'Something went wrong while fetching all trips',
+        isLoading: false,
+      });
+      throw error;
+    }
+  },
 }));

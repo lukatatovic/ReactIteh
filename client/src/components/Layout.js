@@ -13,7 +13,7 @@ const Layout = () => {
       <div>
         <Sidebar/>
       </div>
-      <div className=''>
+      <div className='w-full h-full'>
       <div className='overflow-y-scroll h-full'>
           {(() => {
             switch (dashboardView) {
