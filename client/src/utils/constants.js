@@ -1,6 +1,7 @@
 import { FiInfo,FiLogOut, FiSettings } from 'react-icons/fi';
 import { RiMoneyDollarCircleLine } from 'react-icons/ri';
 import { MdOutlineCategory, MdTravelExplore } from 'react-icons/md';
+import { GrPieChart } from 'react-icons/gr';
 
 export const sidebar_links = [
   {
@@ -20,6 +21,12 @@ export const sidebar_links = [
     label: 'Categories',
     privilege: 'admin',
     icon: <MdOutlineCategory />,
+  },
+  {
+    key: 'overview',
+    label: 'Overview',
+    privilege: 'user',
+    icon: <GrPieChart />,
   },
 ];
 

@@ -5,6 +5,7 @@ import Sidebar from './dashboard/Sidebar';
 import Trips from './dashboard/Trips';
 import Transactions from './dashboard/Transactions';
 import Categories from './dashboard/Categories';
+import Overview from './dashboard/Overview';
 
 const Layout = () => {
   const { dashboardView } = useGlobalContext();
@@ -24,6 +25,8 @@ const Layout = () => {
                 return <Transactions/>;
               case 'categories':
                 return <Categories />;  
+              case 'overview':
+                return <Overview />;  
               default:
                 return <Trips/>;
             }

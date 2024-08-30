@@ -58,6 +58,7 @@ const CreateTransaction = () => {
     const fetchCategories = async () => {
       const response = await getCategories();
       setAllCategories(response.categories);
+      setCategory(response.categories[0]?._id);
     };
 
     fetchCategories();
