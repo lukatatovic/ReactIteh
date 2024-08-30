@@ -9,7 +9,7 @@ import { useAuthStore } from '../../store/authStore';
 const Sidebar = () => {
   const { dashboardView, setDashboardView } = useGlobalContext();
   const navigate = useNavigate();
-  const { logout } = useAuthStore();
+  const { logout, user } = useAuthStore();
 
   const onLogout = async () => {
     await logout();
@@ -24,16 +24,33 @@ const Sidebar = () => {
       </div>
       <div className='flex-1 mt-3'>
         {sidebar_links.map((item) => (
-          <div
-            key={item.key}
-            onClick={() => setDashboardView(item.key)}
-            className={`flex gap-2 items-center font-semibold px-3 py-2 cursor-pointer rounded-sm ${
-              dashboardView === item.key && 'bg-medium-green-cyan text-white'
-            }`}
-          >
-            <span className='text-xl'>{item.icon}</span>
-            {item.label}
-          </div>
+          <>
+          {item.privilege === 'admin' ? (
+            user.isAdmin && (
+              <div
+                key={item.key}
+                onClick={() => setDashboardView(item.key)}
+                className={`flex gap-2 items-center font-semibold px-3 py-2 cursor-pointer rounded-sm ${
+                  dashboardView === item.key && 'bg-emerald-700 text-white'
+                } hover:bg-emerald-600 hover:text-white`}
+              >
+                <span className='text-xl'>{item.icon}</span>
+                {item.label}
+              </div>
+            )
+          ) : (
+            <div
+              key={item.key}
+              onClick={() => setDashboardView(item.key)}
+              className={`flex gap-2 items-center font-semibold px-3 py-2 cursor-pointer rounded-sm ${
+                dashboardView === item.key && 'bg-emerald-700 text-white'
+              } hover:bg-emerald-600 hover:text-white`}
+            >
+              <span className='text-xl'>{item.icon}</span>
+              {item.label}
+            </div>
+          )}
+        </>
         ))}
       </div>
       <div>

@@ -4,6 +4,7 @@ import { useGlobalContext } from '../hooks/useGlobalContext.hook';
 import Sidebar from './dashboard/Sidebar';
 import Trips from './dashboard/Trips';
 import Transactions from './dashboard/Transactions';
+import Categories from './dashboard/Categories';
 
 const Layout = () => {
   const { dashboardView } = useGlobalContext();
@@ -21,6 +22,8 @@ const Layout = () => {
                 return <Trips/>;
               case 'transactions':
                 return <Transactions/>;
+              case 'categories':
+                return <Categories />;  
               default:
                 return <Trips/>;
             }

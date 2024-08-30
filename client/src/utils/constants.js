@@ -1,17 +1,25 @@
 import { FiInfo,FiLogOut, FiSettings } from 'react-icons/fi';
 import { RiMoneyDollarCircleLine } from 'react-icons/ri';
-import { MdTravelExplore } from 'react-icons/md';
+import { MdOutlineCategory, MdTravelExplore } from 'react-icons/md';
 
 export const sidebar_links = [
   {
     key: 'trips',
     label: 'Trips',
+    privilege: 'user',
     icon: <MdTravelExplore />,
   },
   {
     key: 'transactions',
     label: 'Transactions',
+    privilege: 'user',
     icon: <RiMoneyDollarCircleLine />,
+  },
+  {
+    key: 'categories',
+    label: 'Categories',
+    privilege: 'admin',
+    icon: <MdOutlineCategory />,
   },
 ];
 
