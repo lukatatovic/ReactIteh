@@ -10,5 +10,6 @@ router.post('/', verifyToken, transactionController.createTransaction);
 // GET Endpoints
 router.get('/', verifyToken, transactionController.getMyTransactions);
 router.get('/all', verifyToken, transactionController.getAllTransactions);
+router.get('/:tripId/:userId',verifyToken,transactionController.getUserSpendingOnTrip);
 
 export default router;
